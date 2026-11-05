@@ -1,0 +1,62 @@
+/* Base Reset & Core Styling */
+:root {
+  --bg-dark: #070b12;
+  --bg-panel: rgba(10, 15, 26, 0.88);
+  --border-cyan: rgba(0, 243, 255, 0.35);
+  --border-brass: rgba(204, 153, 51, 0.4);
+  --color-cyan: #00f3ff;
+  --color-amber: #ffaa00;
+  --color-red: #ff3344;
+  --color-gold: #e6b800;
+  --color-brass: #cc9933;
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+  --font-mono: 'Consolas', 'Courier New', monospace;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-dark);
+  font-family: var(--font-sans);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+#canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#webgl-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Subtle scanline overlay for cyber-lab texture */
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+  background-size: 100% 3px, 6px 100%;
+  opacity: 0.6;
+}

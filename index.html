@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Java AI Workshop | 3D Interactive Masterclass for Senior Java Engineers</title>
+  <meta name="description" content="A 20-Day interactive 3D spatial workshop transforming Senior Java Developers into Senior Java AI Engineers. Zero frameworks, pure WebGL and Three.js.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 3D WebGL Canvas Layer -->
+  <div id="canvas-container">
+    <canvas id="webgl-canvas"></canvas>
+  </div>
+
+  <!-- Cybernetic Scanline Texture Overlay -->
+  <div class="scanlines"></div>
+
+  <!-- Interactive Tactile HUD Layer -->
+  <div class="hud-layer">
+    <!-- Header -->
+    <header class="hud-header">
+      <div class="brand-badge">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>THE JAVA AI WORKSHOP</h1>
+          <p>SENIOR JAVA &rarr; SENIOR AI ARCHITECT // 20-DAY 3D CADENCE</p>
+        </div>
+      </div>
+
+      <div class="hud-actions">
+        <div class="day-pill" id="status-banner">
+          <span class="status-dot"></span>
+          <span>DAY 1 ACTIVE: PROJECT LOOM</span>
+        </div>
+        <button class="tactile-btn" id="btn-roadmap">
+          <span>📅 20-Day Roadmap</span>
+        </button>
+        <button class="tactile-btn" id="btn-audio-toggle">
+          <span>🔊 Audio: ON</span>
+        </button>
+        <a href="https://github.com/sriharivaleti/SeniorJavaToSeniorAIEngineer" target="_blank" rel="noopener" class="tactile-btn">
+          <span>⭐ GitHub</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Camera Dock (Left side) -->
+    <nav class="camera-dock" aria-label="Camera Presets">
+      <button class="tactile-btn" data-camera="overview" title="Full Workshop Orbit">
+        <span>🔭 Studio Overview</span>
+      </button>
+      <button class="tactile-btn active" data-camera="reactor" title="Focus Loom Reactor">
+        <span>⚡ Loom Reactor</span>
+      </button>
+      <button class="tactile-btn" data-camera="pillars" title="Orbit 8 Knowledge Pillars">
+        <span>🏛️ Pillars Orbit</span>
+      </button>
+    </nav>
+
+    <!-- Central Day 1 Control Deck (Bottom) -->
+    <section class="reactor-deck" aria-label="Loom Concurrency Deck">
+      <div class="deck-header">
+        <div class="deck-title">
+          <h2>DAY 1 WORKBENCH: PROJECT LOOM REACTOR</h2>
+          <span class="tag">JAVA 21+ HIGH-THROUGHPUT CONCURRENCY</span>
+        </div>
+        <div class="deck-actions">
+          <button class="tactile-btn" id="btn-inspect-code">
+            <span>💻 Inspect Java 21 Code</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="deck-controls">
+        <!-- Mode Switch: Virtual Threads vs Platform Threads -->
+        <div class="mode-switch-group">
+          <button class="mode-tab active" id="btn-mode-virtual">
+            VIRTUAL THREADS (M:N)
+          </button>
+          <button class="mode-tab" id="btn-mode-platform">
+            PLATFORM THREADS (1:1 OS)
+          </button>
+        </div>
+
+        <!-- Concurrency Slider -->
+        <div class="slider-group">
+          <div class="slider-labels">
+            <span>CONCURRENT TASKS IN FLIGHT:</span>
+            <span class="slider-val" id="thread-slider-val">50,000</span>
+          </div>
+          <input type="range" id="thread-slider" class="cyber-slider" min="100" max="250000" step="500" value="50000">
+        </div>
+
+        <!-- I/O Stall Injection -->
+        <button class="tactile-btn danger" id="btn-io-stall" title="Simulates a 200ms database query or HTTP API blocking stall">
+          <span>⚠️ Simulate 200ms I/O Stall</span>
+        </button>
+      </div>
+
+      <!-- Real-time Telemetry Grid -->
+      <div class="telemetry-grid">
+        <div class="telemetry-cell">
+          <span class="cell-label">Stack Memory Footprint</span>
+          <span class="cell-value" id="metric-ram">148 MB</span>
+          <span class="cell-status" style="color: var(--color-cyan);">~2 KB Heap / Thread</span>
+        </div>
+
+        <div class="telemetry-cell">
+          <span class="cell-label">OS Kernel Threads</span>
+          <span class="cell-value" id="metric-threads">8 Cores</span>
+          <span class="cell-status" style="color: var(--color-cyan);">ForkJoin Carrier Pool</span>
+        </div>
+
+        <div class="telemetry-cell">
+          <span class="cell-label">Context Switch Latency</span>
+          <span class="cell-value" id="metric-latency">~12 ns</span>
+          <span class="cell-status" style="color: var(--color-gold);">Zero Kernel Traps</span>
+        </div>
+
+        <div class="telemetry-cell">
+          <span class="cell-label">Throughput / Reactor State</span>
+          <span class="cell-value" id="metric-throughput">1,450,000 ops/s</span>
+          <span class="cell-status" id="reactor-status" style="color: var(--color-cyan);">HIGH THROUGHPUT M:N CONCURRENCY</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal: 20-Day Master Roadmap -->
+  <div class="modal-overlay" id="modal-roadmap">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>🚀 20-DAY JAVA &rarr; SENIOR AI ARCHITECT ROADMAP</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-muted); font-size: 0.88rem;">
+          One interactive 3D visual module unlocked every single day. Master the transition from classical JVM mechanics to high-performance enterprise GenAI.
+        </p>
+        <div class="roadmap-list" id="roadmap-cards">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Pillar Detail Inspector -->
+  <div class="modal-overlay" id="modal-pillar">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div>
+          <h3 id="pillar-modal-title">Pillar Title</h3>
+          <p id="pillar-modal-subtitle" style="color: var(--color-cyan); font-family: var(--font-mono); font-size: 0.8rem;"></p>
+        </div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="pillar-modal-summary" style="font-size: 0.95rem; color: #e2e8f0;"></p>
+        <h4 style="color: var(--color-brass); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;">
+          Interactive 3D Subtopics & Syllabus:
+        </h4>
+        <ul id="pillar-modal-topics" style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem;">
+          <!-- Populated dynamically -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Code Inspector -->
+  <div class="modal-overlay" id="modal-code">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="code-modal-title">JAVA 21+ CODE INSPECTOR</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="code-container">
+          <button class="copy-btn" id="btn-copy-code">COPY CODE</button>
+          <pre><code id="code-display">// Java 21+ Project Loom: High-Throughput Concurrency
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    IntStream.range(0, 100_000).forEach(i -> {
+        executor.submit(() -> {
+            // Virtual thread parks on I/O without blocking OS carrier thread!
+            Thread.sleep(Duration.ofMillis(100));
+            return "Task " + i + " completed on " + Thread.currentThread();
+        });
+    });
+} // Automatic structured join at close of scope!</code></pre>
+        </div>
+        <div style="background: rgba(0, 243, 255, 0.05); border-left: 3px solid var(--color-cyan); padding: 0.8rem 1rem; border-radius: 4px; font-size: 0.84rem;">
+          <strong>Senior Architect Note:</strong> Notice how <code>newVirtualThreadPerTaskExecutor()</code> spawns an unbacked virtual thread per request. Unlike platform thread pools where tasks queue up waiting for an available OS thread, virtual threads execute immediately and unmount from their carrier thread whenever blocking I/O (sockets, JDBC, HTTP calls) occurs.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main ES Module Application -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
