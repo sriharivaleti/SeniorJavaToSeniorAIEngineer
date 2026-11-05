@@ -4,7 +4,7 @@
  * Supports hover glows, tactile clicks, sound effects, and modal inspection.
  */
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import * as THREE from 'three';
 import { CURRICULUM_PILLARS } from '../data/curriculum.js';
 import { sound } from '../audio.js';
 
@@ -109,7 +109,11 @@ export class HoloDeck {
       canvas.height = 128;
       const ctx = canvas.getContext('2d');
       ctx.fillStyle = 'rgba(7, 13, 24, 0.85)';
-      ctx.roundRect(10, 10, 492, 108, 20);
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(10, 10, 492, 108, 20);
+      } else {
+        ctx.rect(10, 10, 492, 108);
+      }
       ctx.fill();
       ctx.strokeStyle = pillar.color;
       ctx.lineWidth = 4;
@@ -224,3 +228,4 @@ export class HoloDeck {
     });
   }
 }
+

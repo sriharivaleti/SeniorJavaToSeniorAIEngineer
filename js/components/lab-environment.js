@@ -4,7 +4,7 @@
  * brass & titanium accents, cybernetic grid floor, and ambient dust motes.
  */
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import * as THREE from 'three';
 
 export class LabEnvironment {
   constructor(scene) {
@@ -192,3 +192,4 @@ export class LabEnvironment {
     }
   }
 }
+

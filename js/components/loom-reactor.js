@@ -4,7 +4,7 @@
  * vs Project Loom Virtual Threads (M:N Carrier Threads).
  */
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import * as THREE from 'three';
 import { sound } from '../audio.js';
 
 export class LoomReactor {
@@ -406,3 +406,4 @@ export class LoomReactor {
     }
   }
 }
+

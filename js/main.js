@@ -3,8 +3,8 @@
  * Three.js WebGL Scene, OrbitControls, Raycasting, and HUD binding.
  */
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import { LabEnvironment } from './components/lab-environment.js';
 import { HoloDeck } from './components/holo-deck.js';
@@ -22,8 +22,9 @@ class App {
     this.pointer = new THREE.Vector2();
 
     // Camera target interpolation
-    this.targetCameraPos = new THREE.Vector3(0, 11, 16);
-    this.targetLookAt = new THREE.Vector3(0, 2.5, 0);
+    this.targetCameraPos = new THREE.Vector3(0, 10, 16);
+    this.targetLookAt = new THREE.Vector3(0, 2.2, 0);
+    this.isTransitioning = false;
 
     this.initThree();
     this.initComponents();
@@ -37,7 +38,7 @@ class App {
   initThree() {
     // 1. Scene
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.FogExp2(0x070b12, 0.022);
+    this.scene.fog = new THREE.FogExp2(0x070b12, 0.02);
 
     // 2. Camera
     this.camera = new THREE.PerspectiveCamera(
@@ -66,9 +67,14 @@ class App {
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.06;
     this.controls.maxPolarAngle = Math.PI / 2 - 0.03; // Don't go below floor
-    this.controls.minDistance = 4;
-    this.controls.maxDistance = 35;
+    this.controls.minDistance = 3.5;
+    this.controls.maxDistance = 40;
     this.controls.target.copy(this.targetLookAt);
+
+    // If user starts dragging/interacting, stop programmatic camera transition
+    this.controls.addEventListener('start', () => {
+      this.isTransitioning = false;
+    });
   }
 
   initComponents() {
@@ -192,14 +198,15 @@ class App {
   }
 
   setCameraPreset(preset) {
+    this.isTransitioning = true;
     if (preset === 'overview') {
-      this.targetCameraPos.set(0, 11, 16);
-      this.targetLookAt.set(0, 2.5, 0);
+      this.targetCameraPos.set(0, 10, 16);
+      this.targetLookAt.set(0, 2.2, 0);
     } else if (preset === 'reactor') {
-      this.targetCameraPos.set(0, 3.8, 6.2);
-      this.targetLookAt.set(0, 2.5, 0);
+      this.targetCameraPos.set(0, 3.6, 6.2);
+      this.targetLookAt.set(0, 2.2, 0);
     } else if (preset === 'pillars') {
-      this.targetCameraPos.set(9.5, 5.0, 9.5);
+      this.targetCameraPos.set(9.2, 5.0, 9.2);
       this.targetLookAt.set(0, 1.5, 0);
     }
   }
@@ -291,9 +298,16 @@ class App {
     const delta = this.clock.getDelta();
     const time = this.clock.getElapsedTime();
 
-    // Smoothly ease camera to target preset
-    this.camera.position.lerp(this.targetCameraPos, 0.05);
-    this.controls.target.lerp(this.targetLookAt, 0.05);
+    // Smoothly ease camera to target preset when transitioning
+    if (this.isTransitioning) {
+      this.camera.position.lerp(this.targetCameraPos, 0.08);
+      this.controls.target.lerp(this.targetLookAt, 0.08);
+      if (this.camera.position.distanceTo(this.targetCameraPos) < 0.05) {
+        this.camera.position.copy(this.targetCameraPos);
+        this.controls.target.copy(this.targetLookAt);
+        this.isTransitioning = false;
+      }
+    }
     this.controls.update();
 
     // Update 3D components
@@ -309,3 +323,4 @@ class App {
 window.addEventListener('DOMContentLoaded', () => {
   new App();
 });
+
